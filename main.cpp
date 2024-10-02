@@ -1,8 +1,99 @@
 #include <iostream> 
+#include <random>
 #include <cstdlib> 
 #include <unistd.h>
 
 using namespace std;
+
+std::random_device dev;
+std::mt19937 rng(dev());
+
+bool add_ship(int deck, int (&ships)[10][10]) {
+    int vert = rng() % 2;
+    int start_x = rng() % 10;
+    for (int i = start_x; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            if (vert && i + deck - 1 >= 10) continue;
+            if (!vert && j + deck - 1 >= 10) continue;
+            
+            bool check = true;
+            if (vert) {
+                for (int k = max(i - 1, 0); k <= min(i + deck, 9); ++k) {
+                    for (int t = max(0, j - 1); t <= min(j + 1, 9); ++t) {
+                        check &= ships[k][t] == 0;
+                    }
+                }
+                if (check) {
+                    for (int k = i; k < i + deck; ++k) ships[k][j] = 1;
+                    return true;
+                }
+            } else {
+                for (int k = max(i - 1, 0); k <= min(i + 2, 9); ++k) {
+                    for (int t = max(0, j - 1); t <= min(j + deck, 9); ++t) {
+                        check &= ships[k][t] == 0;
+                    }
+                }
+                if (check) {
+                    for (int k = j; k < j + deck; ++k) ships[i][k] = 1;
+                    return true;
+                }
+            }
+        }
+    }
+    for (int i = start_x; i >= 0; --i) {
+        for (int j = 9; j >= 0; --j) {
+            if (vert && i + deck - 1 >= 10) continue;
+            if (!vert && j + deck - 1 >= 10) continue;
+            
+            bool check = true;
+            if (vert) {
+                for (int k = max(i - 1, 0); k <= min(i + deck, 9); ++k) {
+                    for (int t = max(0, j - 1); t <= min(j + 1, 9); ++t) {
+                        check &= ships[k][t] == 0;
+                    }
+                }
+                if (check) {
+                    for (int k = i; k < i + deck; ++k) ships[k][j] = 1;
+                    return true;
+                }
+            } else {
+                for (int k = max(i - 1, 0); k <= min(i + 2, 9); ++k) {
+                    for (int t = max(0, j - 1); t <= min(j + deck, 9); ++t) {
+                        check &= ships[k][t] == 0;
+                    }
+                }
+                if (check) {
+                    for (int k = j; k < j + deck; ++k) ships[i][k] = 1;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void build_table(int (&ships)[10][10]) {
+    while (true) {
+        bool check = true;
+        check &= add_ship(4, ships);
+        check &= add_ship(3, ships);
+        check &= add_ship(3, ships);
+        check &= add_ship(2, ships);
+        check &= add_ship(2, ships);
+        check &= add_ship(2, ships);
+        check &= add_ship(1, ships);
+        check &= add_ship(1, ships);
+        check &= add_ship(1, ships);
+        check &= add_ship(1, ships);
+        if (check) break;
+
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 10; ++j) {
+                ships[i][j] = 0;
+            }
+        }
+    }    
+}
 
 void print_ship() {
     const int count_of_deck = 4; // количество палуб у корабля
@@ -69,17 +160,16 @@ int main() {
     int n = 2;
     do {
         int count = 20; 
-        int ships[10][10] = { 
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
-        {1, 0, 0, 1, 1, 1, 1, 0, 0, 1}, 
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-        {0, 1, 0, 0, 1, 1, 0, 0, 0, 0}, 
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-        {0, 1, 0, 1, 0, 0, 0, 0, 0, 0}, 
-        {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
-        {0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, 
-        {1, 0, 1, 1, 0, 0, 0, 0, 0, 0} }; 
+        int ships[10][10]{};
+        build_table(ships);
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 10; ++j) {
+                cout << ships[i][j] << ' ';
+            }
+            cout << "\n";
+        }
+        return 0;
+
         // ships[i][j] = 0 - ничего
         // ships[i][j] = 1 - корабль
         // ships[i][j] = 2 - подбитый корабль
