@@ -43,9 +43,6 @@ bool is_correct_shoot(int x, int y, int ships[10][10]) {
              ships[x][y] == 3 or x < 0  or y < 0);
 }
 
-// сообщение при некорректном выстреле
-const string incorrect_shoot = "Некорректный выстрел. Попробуйте еще раз.\n";
-
 void print_table(int ships[10][10]) {
     cout << "  ";
     for (int i = 0; i < 10; i++) cout << i << " "; 
@@ -110,7 +107,8 @@ int main() {
                 usleep(100000);
                 
                 // проверка на корректность выстрела
-                if (!is_correct_shoot(x, y, ships)) cout << incorrect_shoot;
+                if (!is_correct_shoot(x, y, ships)) 
+                    cout << "Некорректный выстрел. Попробуйте еще раз.\n";
                 else break;
             }
 
