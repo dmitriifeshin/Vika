@@ -161,14 +161,7 @@ int main() {
     do {
         int count = 20; 
         int ships[10][10]{};
-        build_table(ships);
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 10; ++j) {
-                cout << ships[i][j] << ' ';
-            }
-            cout << "\n";
-        }
-        return 0;
+        build_table(ships); // рандомная расстановка кораблей
 
         // ships[i][j] = 0 - ничего
         // ships[i][j] = 1 - корабль
