@@ -5,7 +5,7 @@
 using namespace std;
 
 void print_ship() {
-    const int count_of_deck = 5; // количество палуб у корабля
+    const int count_of_deck = 4; // количество палуб у корабля
     string ship[count_of_deck] = {
         "       _    _",
         "    __|_|__|_|__",
