@@ -6,7 +6,7 @@ using namespace std;
 
 void print_ship() {
     const int count_of_deck = 4; // количество палуб у корабля
-    string ship[count_of_deck] = {
+    string ship[count_of_deck] = { // наш кораблик
         "       _    _",
         "    __|_|__|_|__",
         "  _|____________|__",
@@ -18,14 +18,17 @@ void print_ship() {
     system("clear");
     usleep(1000000);
     for (int k = 0; k < 4; ++k) {
-        for (int i = 0; i < count_of_deck; ++i) {
+        // рисуем корабль по палубам
+        for (int i = 0; i < count_of_deck; ++i) { 
             cout << ship[i] << endl;
         }
+        // рисуем море
         cout << sea << endl;
         
         usleep(1000000); 
         system("clear");
         
+        // сдвигаем палубы, чтобы создать эффект плавания
         for (int i = 0; i < count_of_deck; ++i) {
             ship[i] = "   " + ship[i];
         }
@@ -33,7 +36,6 @@ void print_ship() {
     
     cout << "Морской бой" << endl; 
     usleep(1000000);
-    cout << "  ";
 }
 
 bool is_correct_shoot(int x, int y, int ships[10][10]) {
@@ -41,9 +43,11 @@ bool is_correct_shoot(int x, int y, int ships[10][10]) {
              ships[x][y] == 3 or x < 0  or y < 0);
 }
 
+// сообщение при некорректном выстреле
 const string incorrect_shoot = "Некорректный выстрел. Попробуйте еще раз.\n";
 
 void print_table(int ships[10][10]) {
+    cout << "  ";
     for (int i = 0; i < 10; i++) cout << i << " "; 
     cout << endl; 
     for (int i = 0; i < 10; i++) { 
@@ -87,11 +91,11 @@ int main() {
         setlocale(0, ""); 
 
         print_ship(); // рисуем кораблик
-
-        print_table(ships); // рисуем текущее поле противника
         
         int shoot = 0; 
         while (count > 0) {
+            print_table(ships); // рисуем текущее поле противника
+
             // делаем выстрел по противнику
             int x;
             int y;
@@ -110,54 +114,35 @@ int main() {
                 else break;
             }
 
+            // обновляем поле противника, в зависиморсти
+            // от того, куда попали
             system("clear");
             if (ships[x][y] == 1) { 
                 ships[x][y] = 2; 
                 count--; 
             } 
-            else if(ships[x][y] == 0) ships[x][y] = 3; 
-            shoot++; 
-            
-            cout << "  "; 
-            for(int i = 0; i < 10; i++) cout << i<< " ";  
-            cout <<endl; 
-                for(int i = 0; i < 10; i++) { 
-                cout << i<< " "; 
-            
-                for(int j=0;j<10;j++){ 
-                    if(ships[i][j]==0)printf("\033[3%d;4%dm", 7, 7); 
-                    else if(ships[i][j]==2) printf("\033[3%d;4%dm", 1, 0);  
-                    else if(ships[i][j]==1) printf("\033[3%d;4%dm", 7, 7);  
-                    else if(ships[i][j]==3) printf("\033[3%d;4%dm", 7, 4); 
-                    if(ships[i][j]==0) cout << "  "; 
-                    else if(ships[i][j]==2) cout << "+ "; 
-                    else if(ships[i][j]==1) cout << "  "; 
-                    else if(ships[i][j]==3) cout << ". "; 
-                } 
-                printf("\033[00m");
-                cout << endl; 
-            } 
-        } 
+            if (ships[x][y] == 0) ships[x][y] = 3; 
+            shoot++;
+        }
+
         cout << "Вы победили!" << endl; 
         usleep(1000000);
-        cout << "Вам потребовалось выстрелов: " <<  shoot<< endl;
+        cout << "Вам потребовалось выстрелов: " <<  shoot << endl;
         usleep(1000000);
-        cout << "Если хотите начать сначала, нажмите 1, если нет, то 0." <<  endl;
+        cout << "Если хотите начать сначала, нажмите 1, если нет, то 0." << endl;
         usleep(1000000);
         cout << "Введите: ";
         int e;
-        cin>> e;
-        if(e == 1) {
+        cin >> e;
+        if (e == 1) {
             n = 2;
-        system("clear");
-            
+            system("clear"); 
         }
         else{
-        n = 0;
-        system("clear");
-        cout << "Спасибо за игру!";
+            n = 0;
+            system("clear");
+            cout << "Спасибо за игру!";
         }
-
     } while (n == 2);
     
     cin.get();
